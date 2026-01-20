@@ -1,0 +1,172 @@
+# Documentation Schema
+# This schema MUST be validated before writing any documentation file
+
+required_fields:
+  module:
+    type: string
+    description: "Module/area of the system (e.g., 'User Service', 'Payment Handler', 'Authentication')"
+    examples:
+      - "User Service"
+      - "Payment Handler"
+      - "Authentication"
+      - "API Gateway"
+
+  date:
+    type: string
+    pattern: '^\d{4}-\d{2}-\d{2}$'
+    description: "Date when this problem was solved (YYYY-MM-DD)"
+
+  problem_type:
+    type: enum
+    values:
+      - build_error          # Compilation, bundling, build errors
+      - test_failure         # Test failures, flaky tests
+      - runtime_error        # Exceptions, crashes during execution
+      - performance_issue    # Slow queries, memory issues, N+1 queries
+      - database_issue       # Migration, query, schema problems
+      - security_issue       # Authentication, authorization, XSS, injection
+      - ui_bug               # Frontend, rendering, component issues
+      - integration_issue    # External service, API integration problems
+      - logic_error          # Business logic bugs
+      - developer_experience # DX issues: workflow, tooling, setup
+      - workflow_issue       # Development process, missing steps
+      - best_practice        # Documenting patterns and practices
+      - documentation_gap    # Missing or inadequate documentation
+    description: "Primary category of the problem"
+
+  component:
+    type: enum
+    values:
+      - model                # Data models, ORM models
+      - controller           # Request handlers, controllers
+      - view                 # Templates, view components
+      - service              # Service classes, business logic
+      - background_job       # Async jobs, workers, queues
+      - database             # Database, migrations, schema
+      - frontend             # JavaScript/TypeScript frontend code
+      - ui_component         # UI components, widgets
+      - api_handler          # API endpoint handlers
+      - auth                 # Authentication, authorization
+      - payment              # Payment processing, billing
+      - development_workflow # Dev process, tooling
+      - testing              # Test setup, fixtures
+      - documentation        # README, guides, inline docs
+      - tooling              # Scripts, generators, CLI tools
+      - config               # Configuration, environment
+    description: "Component type involved"
+
+  symptoms:
+    type: array[string]
+    min_items: 1
+    max_items: 5
+    description: "Observable symptoms (error messages, visual issues, crashes)"
+    examples:
+      - "N+1 query detected in user list"
+      - "API response taking >2 seconds"
+      - "Component not rendering correctly"
+
+  root_cause:
+    type: enum
+    values:
+      - missing_association  # Incorrect data relationships
+      - missing_include      # Missing eager loading (N+1)
+      - missing_index        # Database performance issue
+      - wrong_api            # Using deprecated/incorrect API
+      - scope_issue          # Incorrect query scope or filtering
+      - thread_violation     # Thread safety issue
+      - async_timing         # Async timing/race condition
+      - memory_leak          # Memory leak or excessive allocation
+      - config_error         # Configuration or environment issue
+      - logic_error          # Algorithm/business logic bug
+      - test_isolation       # Test isolation or fixture issue
+      - missing_validation   # Missing input validation
+      - missing_permission   # Authorization check missing
+      - missing_workflow_step # Skipped or undocumented step
+      - inadequate_documentation # Missing or unclear docs
+      - missing_tooling      # Lacking helper scripts
+      - incomplete_setup     # Missing seed data, fixtures, config
+    description: "Fundamental cause of the problem"
+
+  resolution_type:
+    type: enum
+    values:
+      - code_fix             # Fixed by changing source code
+      - migration            # Fixed by database migration
+      - config_change        # Fixed by changing configuration
+      - test_fix             # Fixed by correcting tests
+      - dependency_update    # Fixed by updating dependency
+      - environment_setup    # Fixed by environment configuration
+      - workflow_improvement # Improved development workflow
+      - documentation_update # Added or updated documentation
+      - tooling_addition     # Added helper script or automation
+      - seed_data_update     # Updated seed data or fixtures
+    description: "Type of fix applied"
+
+  severity:
+    type: enum
+    values:
+      - critical             # Blocks production or development
+      - high                 # Impairs core functionality
+      - medium               # Affects specific feature
+      - low                  # Minor issue or edge case
+    description: "Impact severity"
+
+optional_fields:
+  framework_version:
+    type: string
+    description: "Framework version where this was encountered"
+
+  related_components:
+    type: array[string]
+    description: "Other components that interact with this issue"
+
+  tags:
+    type: array[string]
+    max_items: 8
+    description: "Searchable keywords (lowercase, hyphen-separated)"
+    examples:
+      - "n-plus-one"
+      - "eager-loading"
+      - "test-isolation"
+      - "api-timeout"
+
+validation_rules:
+  - "module must be a valid module/component name"
+  - "date must be in YYYY-MM-DD format"
+  - "problem_type must match one of the enum values"
+  - "component must match one of the enum values"
+  - "symptoms must be specific and observable (not vague)"
+  - "root_cause must be the ACTUAL cause, not a symptom"
+  - "resolution_type must match one of the enum values"
+  - "severity must match one of the enum values"
+  - "tags should be lowercase, hyphen-separated"
+
+# Example valid front matter:
+# ---
+# module: User Service
+# date: 2025-11-12
+# problem_type: performance_issue
+# component: model
+# symptoms:
+#   - N+1 query when loading user profiles
+#   - User list taking >5 seconds
+# root_cause: missing_include
+# resolution_type: code_fix
+# severity: high
+# tags: [n-plus-one, eager-loading, performance]
+# ---
+#
+# Example DX issue front matter:
+# ---
+# module: Development Workflow
+# date: 2025-11-13
+# problem_type: developer_experience
+# component: development_workflow
+# symptoms:
+#   - No example data for new feature in development
+#   - Seed script doesn't demonstrate new capabilities
+# root_cause: incomplete_setup
+# resolution_type: seed_data_update
+# severity: low
+# tags: [seed-data, dx, workflow]
+# ---

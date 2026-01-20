@@ -1,0 +1,20 @@
+{
+  "name": "compound-engineering-essentials",
+  "version": "2.1.0",
+  "description": "Framework-agnostic AI-powered development tools. 8 agents, 13 commands, 6 skills for code review, research, and workflow automation.",
+  "author": {
+    "name": "Muhammad Shafeeq",
+    "url": "https://github.com/hmshafeeq"
+  },
+  "homepage": "https://github.com/hmshafeeq/claude-code-plugins",
+  "repository": "https://github.com/hmshafeeq/claude-code-plugins",
+  "license": "MIT",
+  "keywords": [
+    "ai-powered",
+    "compound-engineering",
+    "workflow-automation",
+    "code-review",
+    "framework-agnostic",
+    "knowledge-management"
+  ]
+}
